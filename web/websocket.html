@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset='utf-8'>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+		<script>
+
+			var conn = null;
+			var isConnected = false;
+			var testTopic = "testTopic";
+			var testMethod = "helloWorld";
+
+			function setOnline() {
+				$("#status").removeClass("label-warning");
+				$("#status").addClass("label-success");
+				$("#status").html("Connected");
+				$("button.connect").html("Disconnect");
+			}
+
+			function setOffline() {
+				$("#status").addClass("label-warning");
+				$("#status").removeClass("label-success");
+				$("#status").html("Disconnected");
+				$("button.connect").html("Connect");
+			}
+
+			function send() {
+				var jsonData = {
+					"message": "stuff"
+				};
+				console.log("Sending " + jsonData);
+				conn.send(jsonData);
+			}
+
+			function toggleConnect() {
+				if (! isConnected) {
+					conn = new WebSocket("ws://192.168.56.101:8080/");
+					conn.onopen =
+						function(e) {
+							setOnline();
+							console.log("Connected");
+							isConnected = true;
+						};
+					conn.onclose =
+						function(e) {
+							console.log("Disconnected");
+							setOffline();
+						};
+					return;
+				}
+				conn.close();
+				isConnected = false;
+			}
+
+			setOffline();
+
+		</script>
+	</head>
+	<body>
+		<h3>This is a websocket demo using basic websockets</h3>
+		<span id="status" class="label label-warning">Disconnected</span>
+		<button onclick='toggleConnect();' class="connect">Connect</button>
+		<button onclick='send();' class="send">Send Message</button>
+
+	</body>
+</html>
