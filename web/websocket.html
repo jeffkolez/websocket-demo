@@ -37,8 +37,10 @@
 			}
 
 			function toggleConnect() {
+				var uri = $("#ip_address").val();
+				
 				if (! isConnected) {
-					conn = new WebSocket("ws://192.168.56.101:8080/");
+					conn = new WebSocket(uri);
 					conn.onopen =
 						function(e) {
 							setOnline();
@@ -62,6 +64,7 @@
 	</head>
 	<body>
 		<h3>This is a websocket demo using basic websockets</h3>
+		<div>Server IP: <input type="text" id="ip_address" value="ws://127.0.0.1:8080/"/></div>
 		<span id="status" class="label label-warning">Disconnected</span>
 		<button onclick='toggleConnect();' class="connect">Connect</button>
 		<button onclick='send();' class="send">Send Message</button>

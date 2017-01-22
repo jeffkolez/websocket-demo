@@ -23,6 +23,7 @@ class Chat implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
         echo "Received a new message\n";
+        var_dump($msg);
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {

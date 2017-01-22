@@ -56,8 +56,10 @@
 			}
 
 			function toggleConnect() {
+				var uri = $("#ip_address").val();
+
 				if (! isConnected) {
-					conn = new ab.Session('ws://192.168.56.101:8080/',
+					conn = new ab.Session(uri,
 						function() {
 							setOnline();
 							isConnected = true;
@@ -79,6 +81,7 @@
 	</head>
 	<body>
 		<h3>This is a websocket demo using the WAMP protocol</h3>
+		<div>Server IP: <input type="text" id="ip_address" value="ws://127.0.0.1:8080/"/></div>
 		<span id="status" class="label label-warning">Disconnected</span>
 		<button onclick='toggleConnect();' class="connect">Connect</button>
 		<button onclick='subscribe();' class="subscribe">Subscribe</button>
