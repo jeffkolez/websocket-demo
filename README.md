@@ -2,7 +2,7 @@
 
 A demo using PHP with websockets.
 
-There are two websocket demos here. One is a demo using vanilla websockets, the kind that come built-in to your browser - it's a chat server. The second is a demo of websockets using the WAMP v1 protocol. There is more functionality
+There are two websocket demos here. One is a demo using vanilla websockets, the kind that come built-in to your browser - it's a chat server. The second is a demo of websockets using the WAMP v1 protocol. There is more functionality with a WAMP implementation. For more information on WAMP, [click here](http://wamp-proto.org).
 
 ## Install
 
