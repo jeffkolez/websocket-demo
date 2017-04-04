@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset='utf-8'>
+		<script src="https://raw.githubusercontent.com/cujojs/when/master/when.js"></script>
 		<script src="https://gist.githubusercontent.com/cboden/fcae978cfc016d506639c5241f94e772/raw/e974ce895df527c83b8e010124a034cfcf6c9f4b/autobahn.js"></script>
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
@@ -15,11 +16,18 @@
 			var testTopic = "testTopic";
 			var testMethod = "helloWorld";
 
+			$(function() {
+				setOffline();
+			});
+
 			function setOnline() {
 				$("#status").removeClass("label-warning");
 				$("#status").addClass("label-success");
 				$("#status").html("Connected");
 				$("button.connect").html("Disconnect");
+				$("#offlineActions").hide();
+				$("#onlineActions").show();
+				var isConnected = true;
 			}
 
 			function setOffline() {
@@ -27,13 +35,16 @@
 				$("#status").removeClass("label-success");
 				$("#status").html("Disconnected");
 				$("button.connect").html("Connect");
+				$("#offlineActions").show();
+				$("#onlineActions").hide();
+				var isConnected = false;
 			}
 
 			function subscribe() {
 				conn.subscribe(testTopic, function(topic, data) {
-					console.log("New article published to " + topic);
+					console.log("Subscribed to " + topic);
 				});
-				console.log("Subscribed to " + topic);
+
 			}
 
 			function publish() {
@@ -45,6 +56,7 @@
 
 			function callMethod() {
 				params = {};
+				testMethod = "testMethod";
 				conn.call(testMethod).then(
 					function (result) {
 						console.log("called " + testMethod);
@@ -56,37 +68,45 @@
 			}
 
 			function toggleConnect() {
-				var uri = $("#ip_address").val();
+				var uri = $("#conn_str").val();
 
-				if (! isConnected) {
-					conn = new ab.Session(uri,
-						function() {
-							setOnline();
-							isConnected = true;
-						},
-						function() {
-							setOffline();
-						},
-						{'skipSubprotocolCheck': true}
-					);
+				if (isConnected) {
+					setOffline();
 					return;
 				}
-				conn.close();
-				isConnected = false;
+
+				conn = new ab.Session(uri,
+					function() {
+						setOnline();
+						isConnected = true;
+					},
+					function() {
+						setOffline();
+					},
+					{'skipSubprotocolCheck': true}
+				);
 			}
 
-			setOffline();
+
+
 
 		</script>
 	</head>
 	<body>
-		<h3>This is a websocket demo using the WAMP protocol</h3>
-		<div>Server IP: <input type="text" id="ip_address" value="ws://127.0.0.1:8080/"/></div>
-		<span id="status" class="label label-warning">Disconnected</span>
-		<button onclick='toggleConnect();' class="connect">Connect</button>
-		<button onclick='subscribe();' class="subscribe">Subscribe</button>
-		<button onclick='publish();' class="publish">Publish</button>
-		<button onclick='callMethod();' class="call">Call Remote Method</button>
+		<h3>This is a websocket demo using the WAMP protocol and Ratchet</h3>
 
+		<div id="offlineActions">
+			<div>Server IP: <input type="text" id="conn_str" value="ws://127.0.0.1:8080/"/></div>
+
+		</div>
+		<div id="statusBox">
+			<span id="status" class="label label-warning">Disconnected</span>
+			<button onclick='toggleConnect();' class="connect">Connect</button>
+		</div>
+		<div id="onlineActions">
+			<button onclick='subscribe();' class="subscribe">Subscribe</button>
+			<button onclick='publish();' class="publish">Publish</button>
+			<button onclick='callMethod();' class="call">Call Remote Method</button>
+		</div>
 	</body>
 </html>

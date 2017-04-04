@@ -12,13 +12,17 @@
 			var conn = null;
 			var isConnected = false;
 
+			$(function() {
+				setOffline();
+			});
+
 			function setOnline() {
 				$("#status").removeClass("label-warning");
 				$("#status").addClass("label-success");
 				$("#status").html("Connected");
 				$("button.connect").html("Disconnect");
-				$("#offline").hide();
-				$("#sendMessage").show();
+				$("#offlineActions").hide();
+				$("#onlineActions").show();
 				isConnected = true;
 			}
 
@@ -27,8 +31,8 @@
 				$("#status").removeClass("label-success");
 				$("#status").html("Disconnected");
 				$("button.connect").html("Connect");
-				$("#offline").show();
-				$("#sendMessage").hide();
+				$("#offlineActions").show();
+				$("#onlineActions").hide();
 				isConnected = false;
 			}
 
@@ -44,7 +48,6 @@
 
 			function toggleConnect() {
 				var uri = $("#conn_str").val();
-
 				if (isConnected) {
 					setOffline();
 					return;
@@ -65,14 +68,13 @@
 					};
 
 			}
-			setOffline();
 
 		</script>
 	</head>
 	<body>
 		<h3>This is a websocket demo using basic websockets</h3>
 
-		<div id="offline">
+		<div id="offlineActions">
 			<div>Server IP: <input type="text" id="conn_str" value="ws://127.0.0.1:8080/"/></div>
 
 		</div>
@@ -80,7 +82,7 @@
 			<span id="status" class="label label-warning">Disconnected</span>
 			<button onclick='toggleConnect();' class="connect">Connect</button>
 		</div>
-		<div id="sendMessage">
+		<div id="onlineActions" class="display: none">
 			<input type="text" id="message"/>
 			<button onclick='send();' class="send">Send Message</button>
 		</div>

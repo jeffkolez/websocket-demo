@@ -38,4 +38,23 @@ Received a new message
 string(12) "Hello world!"
 ```
 
+### WAMP implementation
+
+To run the WAMP server (Ratchet implementation), run this from the command line:
+
+```
+php bin/wamp-server.php
+```
+
+Then open ```web/wamp.html``` in a web browser. Most people should be fine with the default settings, but you can adjust the IP address and port if necessary.
+
+Once you connect, you'll be able to use pub/sub, or call a remote method:
+
+```
+jeff@devlocal:websocket-demo$ php bin/wamp-server.php
+Connected
+Subscribing to testTopic
+Publishing to testTopic
+```
+
 
