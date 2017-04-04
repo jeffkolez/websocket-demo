@@ -11,14 +11,15 @@
 
 			var conn = null;
 			var isConnected = false;
-			var testTopic = "testTopic";
-			var testMethod = "helloWorld";
 
 			function setOnline() {
 				$("#status").removeClass("label-warning");
 				$("#status").addClass("label-success");
 				$("#status").html("Connected");
 				$("button.connect").html("Disconnect");
+				$("#offline").hide();
+				$("#sendMessage").show();
+				isConnected = true;
 			}
 
 			function setOffline() {
@@ -26,48 +27,62 @@
 				$("#status").removeClass("label-success");
 				$("#status").html("Disconnected");
 				$("button.connect").html("Connect");
-			}
-
-			function send() {
-				var jsonData = {
-					"message": "stuff"
-				};
-				console.log("Sending " + jsonData);
-				conn.send(jsonData);
-			}
-
-			function toggleConnect() {
-				var uri = $("#ip_address").val();
-				
-				if (! isConnected) {
-					conn = new WebSocket(uri);
-					conn.onopen =
-						function(e) {
-							setOnline();
-							console.log("Connected");
-							isConnected = true;
-						};
-					conn.onclose =
-						function(e) {
-							console.log("Disconnected");
-							setOffline();
-						};
-					return;
-				}
-				conn.close();
+				$("#offline").show();
+				$("#sendMessage").hide();
 				isConnected = false;
 			}
 
+			function send() {
+				msg = $("#message").val();
+				if (msg == "") {
+					alert("Can't send an empty message");
+					return;
+				}
+				conn.send(msg);
+				msg = $("#message").val("");
+			}
+
+			function toggleConnect() {
+				var uri = $("#conn_str").val();
+
+				if (isConnected) {
+					setOffline();
+					return;
+				}
+				conn = new WebSocket(uri);
+
+				conn.onopen =
+					function(e) {
+						console.log(e);
+						setOnline();
+						console.log("Connected");
+						isConnected = true;
+					};
+				conn.onclose =
+					function(e) {
+						console.log("Disconnected");
+						setOffline();
+					};
+
+			}
 			setOffline();
 
 		</script>
 	</head>
 	<body>
 		<h3>This is a websocket demo using basic websockets</h3>
-		<div>Server IP: <input type="text" id="ip_address" value="ws://127.0.0.1:8080/"/></div>
-		<span id="status" class="label label-warning">Disconnected</span>
-		<button onclick='toggleConnect();' class="connect">Connect</button>
-		<button onclick='send();' class="send">Send Message</button>
 
+		<div id="offline">
+			<div>Server IP: <input type="text" id="conn_str" value="ws://127.0.0.1:8080/"/></div>
+
+		</div>
+		<div id="statusBox">
+			<span id="status" class="label label-warning">Disconnected</span>
+			<button onclick='toggleConnect();' class="connect">Connect</button>
+		</div>
+		<div id="sendMessage">
+			<input type="text" id="message"/>
+			<button onclick='send();' class="send">Send Message</button>
+		</div>
 	</body>
 </html>
