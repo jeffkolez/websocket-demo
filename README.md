@@ -27,7 +27,7 @@ To run the chat server (vanilla websockets), run this from the command line:
 php bin/chat-server.php
 ```
 
-Then open ```web/websocket.html```. Most people should be fine with the default settings, but you can adjust the IP address and port if necessary. Once you connect, you'll be able to send a message.
+Then open ```web/websocket.html``` in a web browser. Most people should be fine with the default settings, but you can adjust the IP address and port if necessary. Once you connect, you'll be able to send a message.
 
 Messages will show in the same window as you ran your websocket server:
 
@@ -36,7 +36,6 @@ jeff@devlocal:ratchet-websocket-demo$ php bin/chat-server.php
 New connection! (45)
 Received a new message
 string(12) "Hello world!"
-
 ```
 
 
