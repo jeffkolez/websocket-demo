@@ -11,7 +11,7 @@ use MyApp\Chat;
 $server = IoServer::factory(
     new HttpServer(
         new WsServer(
-            new Chat
+            new Chat()
         )
     )
   , 8080

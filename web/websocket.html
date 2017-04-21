@@ -43,7 +43,8 @@
 					return;
 				}
 				conn.send(msg);
-				msg = $("#message").val("");
+				$("#chatTarget").prepend("Me: " + msg + "<br/>");
+				$("#message").val("");
 			}
 
 			function toggleConnect() {
@@ -53,6 +54,10 @@
 					return;
 				}
 				conn = new WebSocket(uri);
+
+				conn.onmessage = function(e) {
+					$("#chatTarget").prepend("Not me: " + e.data + "<br/>");
+				}
 
 				conn.onopen =
 					function(e) {
@@ -85,6 +90,8 @@
 		<div id="onlineActions" class="display: none">
 			<input type="text" id="message"/>
 			<button onclick='send();' class="send">Send Message</button>
+		</div>
+		<div id="chatTarget" style="overflow-y: scroll; height:400px;">
 		</div>
 	</body>
 </html>
