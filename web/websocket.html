@@ -59,18 +59,17 @@
 					$("#chatTarget").prepend("Not me: " + e.data + "<br/>");
 				}
 
-				conn.onopen =
-					function(e) {
-						console.log(e);
-						setOnline();
-						console.log("Connected");
-						isConnected = true;
-					};
-				conn.onclose =
-					function(e) {
-						console.log("Disconnected");
-						setOffline();
-					};
+				conn.onopen = function(e) {
+					console.log(e);
+					setOnline();
+					console.log("Connected");
+					isConnected = true;
+				};
+
+				conn.onclose = function(e) {
+					console.log("Disconnected");
+					setOffline();
+				};
 
 			}
 
